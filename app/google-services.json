@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "1063212413523",
+    "firebase_url": "https://driver-hiring-app-12925-default-rtdb.firebaseio.com",
+    "project_id": "driver-hiring-app-12925",
+    "storage_bucket": "driver-hiring-app-12925.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063212413523:android:4f9b9204550bfab94c0ca6",
+        "android_client_info": {
+          "package_name": "com.DriverHiring.FYP"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063212413523-guioilh4f2d6amgis6e9i8teq0oh71tk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3ZJNWx8yz6btZp7hmuryT_oTRN_yCgtI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063212413523-guioilh4f2d6amgis6e9i8teq0oh71tk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063212413523:android:6c73eae3ec5601a44c0ca6",
+        "android_client_info": {
+          "package_name": "com.DriverHiring.Taxi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063212413523-0fu9h0qo1fhsav384hhujof13vrm7290.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.DriverHiring.Taxi",
+            "certificate_hash": "0c8bdda9c0845b7e06b490d8dec90b5935ec4d1f"
+          }
+        },
+        {
+          "client_id": "1063212413523-guioilh4f2d6amgis6e9i8teq0oh71tk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3ZJNWx8yz6btZp7hmuryT_oTRN_yCgtI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063212413523-guioilh4f2d6amgis6e9i8teq0oh71tk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
