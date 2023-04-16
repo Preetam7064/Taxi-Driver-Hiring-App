@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DriverHiring.Taxi.Adatpters.PostAdapter;
+import com.DriverHiring.Taxi.ModelClasses.NewPostRider;
 import com.DriverHiring.Taxi.ModelClasses.PostDriver;
 import com.DriverHiring.Taxi.ModelClasses.PostRider;
 import com.google.firebase.database.ChildEventListener;
@@ -38,7 +39,7 @@ public class MySentRequests extends Fragment {
     private MyAddedPosts.OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private DatabaseReference myRef;
-    private ArrayList<PostRider> listrider = new ArrayList<>();
+    private ArrayList<NewPostRider> listrider = new ArrayList<>();
     private String type;
 
 
@@ -74,7 +75,7 @@ public class MySentRequests extends Fragment {
                 public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                     //to avoid nuul exception
-                    listrider.add(new PostRider("", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+                    listrider.add(new NewPostRider("", "", "", "", "", "", "", "", "", "", "", "", "", "","",""));
 
 
                     PostDriver value = dataSnapshot.getValue(PostDriver.class);
@@ -121,7 +122,7 @@ public class MySentRequests extends Fragment {
                     postDriverArrayList.add(new PostDriver("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
 
 
-                    PostRider value = dataSnapshot.getValue(PostRider.class);
+                    NewPostRider value = dataSnapshot.getValue(NewPostRider.class);
 
                     if (currentUserUid.equals(value.getUid())) {
                         listrider.add(value);

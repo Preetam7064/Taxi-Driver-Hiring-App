@@ -42,7 +42,7 @@ public class ListAllPosts extends AppCompatActivity implements
         viewPagerTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Toast.makeText(ListAllPosts.this, "Changed to " + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ListAllPosts.this, "Changed to " + position, Toast.LENGTH_SHORT).show();
             }
 
             @Override

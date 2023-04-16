@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.DriverHiring.Taxi.AllPostsWork.ListAllPosts;
 import com.DriverHiring.Taxi.AllPostsWork.PostYourTravel;
+import com.DriverHiring.Taxi.AllPostsWork.PostYourTravelRider;
 import com.DriverHiring.Taxi.ChatStuff.MainActivity;
 import com.DriverHiring.Taxi.ModelClasses.StartRideRequestModel;
 import com.DriverHiring.Taxi.ModelClasses.User;
@@ -86,6 +87,7 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
 
 
     private static final String TAG = "MainActivity";
+    private static final int[] COLORS = new int[]{R.color.primary_dark1, R.color.primary1, R.color.primary_light1, R.color.accent1, R.color.primary_dark};
     FloatingActionButton fab_homepage;
     ///navigasstion
     ImageView ImageViewNav;
@@ -96,6 +98,7 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
     FirebaseDatabase database;
     DatabaseReference myRef;
     FirebaseUser fuser;
+    ArrayList<StartRideRequestModel> rideRequestModelArrayList = new ArrayList<>();
     private EditText name;
     private EditText age;
     private Button addData;
@@ -117,11 +120,7 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
     private DatabaseReference reference;
     private String uid;
     private String fullname;
-
     private List<Polyline> polylines;
-    ArrayList<StartRideRequestModel> rideRequestModelArrayList = new ArrayList<>();
-
-    private static final int[] COLORS = new int[]{R.color.primary_dark1, R.color.primary1, R.color.primary_light1, R.color.accent1, R.color.primary_dark};
     private LatLng start;
     private LatLng end;
     private boolean showRides = true;
@@ -217,8 +216,16 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
         fab_homepage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), PostYourTravel.class));
-                finish();
+                if(type_user.equals("driver"))
+                {
+                    startActivity(new Intent(getApplicationContext(), PostYourTravel.class));
+                    finish();
+                }
+                else {
+                    startActivity(new Intent(getApplicationContext(), PostYourTravelRider.class));
+                    finish();
+                }
+
             }
         });
 
@@ -370,7 +377,7 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
         String msg = "Updated Location: " +
                 Double.toString(location.getLatitude()) + "," +
                 Double.toString(location.getLongitude());
-        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         // You can now create a LatLng Object for use with maps
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -538,44 +545,44 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
                         Manifest.permission.RECORD_AUDIO,
                         Manifest.permission.CALL_PHONE
                 ).withListener(new MultiplePermissionsListener() {
-            @Override
-            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
 
-                if (report.isAnyPermissionPermanentlyDenied()) {
-                    // check for permanent denial of permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            // check for permanent denial of permission
 
-                    isPermission = false;
-
-
-                    final AlertDialog.Builder dialog = new AlertDialog.Builder(HomePageMap.this);
-                    dialog.setTitle("Permissions")
-                            .setMessage("You have to give all permissions!!, the app will close now")
-
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                                    finishAffinity();
-                                }
-                            });
-                    dialog.setCancelable(false);
-                    dialog.show();
-
-                } else if (report.areAllPermissionsGranted()) {
-
-                    //Single Permission is granted
-                    Toast.makeText(getApplicationContext(), "permissions are granted!", Toast.LENGTH_SHORT).show();
-                    isPermission = true;
-
-                }
+                            isPermission = false;
 
 
-            }
+                            final AlertDialog.Builder dialog = new AlertDialog.Builder(HomePageMap.this);
+                            dialog.setTitle("Permissions")
+                                    .setMessage("You have to give all permissions!!, the app will close now")
 
-            @Override
-            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                                            finishAffinity();
+                                        }
+                                    });
+                            dialog.setCancelable(false);
+                            dialog.show();
 
-            }
-        }).check();
+                        } else if (report.areAllPermissionsGranted()) {
+
+                            //Single Permission is granted
+                            Toast.makeText(getApplicationContext(), "permissions are granted!", Toast.LENGTH_SHORT).show();
+                            isPermission = true;
+
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+
+                    }
+                }).check();
 
 
         return isPermission;
@@ -655,6 +662,10 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
 
 
         DatabaseReference re = FirebaseDatabase.getInstance().getReference("CurrentRides");
+        if(re==null)
+        {
+            Toast.makeText(HomePageMap.this, "No current Activity", Toast.LENGTH_SHORT).show();
+        }
 
         re.addValueEventListener(new ValueEventListener() {
             @Override
@@ -727,9 +738,9 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
                                         mMap.addMarker(new MarkerOptions().position(end).title("End Point"));
 
 
-//                                  CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(13.0f).build();
-//                                  CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
-//                                  mMap.animateCamera(cameraUpdate);
+//                                 CameraPosition cameraPosition = new CameraPosition.Builder().target(start).zoom(13.0f).build();
+//                                 CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+//                                mMap.animateCamera(cameraUpdate);
 
                                     }
 
@@ -775,6 +786,8 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
     public boolean onNavigationItemSelected(MenuItem item) {
 
 
+
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -782,8 +795,15 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
             startActivity(new Intent(getApplicationContext(), ProfilePage.class));
             finish();
         } else if (id == R.id.findserviceMenu) {
-            startActivity(new Intent(getApplicationContext(), PostYourTravel.class));
-            finish();
+            if(type_user.equals("rider"))
+            {
+                startActivity(new Intent(getApplicationContext(), PostYourTravelRider.class));
+                finish();
+            }
+            else {
+                startActivity(new Intent(getApplicationContext(), PostYourTravel.class));
+                finish();
+            }
 
         } else if (id == R.id.messangerMenue) {
             startActivity(new Intent(HomePageMap.this, MainActivity.class));

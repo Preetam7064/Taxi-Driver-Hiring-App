@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DriverHiring.Taxi.Adatpters.PostAdapter;
+import com.DriverHiring.Taxi.DriverRideMap;
+import com.DriverHiring.Taxi.ModelClasses.NewPostRider;
 import com.DriverHiring.Taxi.ModelClasses.PostDriver;
 import com.DriverHiring.Taxi.ModelClasses.PostRider;
 import com.DriverHiring.Taxi.ModelClasses.RequestsModel;
@@ -45,7 +48,7 @@ public class AcceptedRequest extends Fragment {
     private MyAddedPosts.OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private DatabaseReference myRef;
-    private ArrayList<PostRider> listrider = new ArrayList<>();
+    private ArrayList<NewPostRider> listrider = new ArrayList<>();
     private String type;
 
     @Override
@@ -75,7 +78,7 @@ public class AcceptedRequest extends Fragment {
             recyclerView.setVisibility(View.GONE);
             listView.setVisibility(View.VISIBLE);
 
-            myRef = FirebaseDatabase.getInstance().getReference("Driver Accepted Requests").child(currentUserUid);
+            myRef = FirebaseDatabase.getInstance().getReference("Accepted Requests").child(currentUserUid);
 
             myRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -98,7 +101,8 @@ public class AcceptedRequest extends Fragment {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position,
                                                 long id) {
-                            Intent intent = new Intent(getActivity(), AcceptActivityPart2.class);
+                            Intent intent = new Intent(getActivity(), DriverRideMap.class);
+                            Toast.makeText(view.getContext(), ""+myStringData.get(position), Toast.LENGTH_SHORT).show();
 
                             intent.putExtra("myid", myStringData.get(position));
                             startActivity(intent);
@@ -142,7 +146,7 @@ public class AcceptedRequest extends Fragment {
 
                         System.err.println("mydata" + dataSnapshot.getValue());
 
-                        listrider.add(new PostRider("", "", mode.getEndpoint(), mode.getSendername(), mode.getId(), "", "", "", "", mode.getImgurl(), "", "", mode.getStartpoint(), mode.getSenderid()));
+                        listrider.add(new NewPostRider("", mode.getEndpoint(), mode.getSendername(), mode.getId(), "", "", "", "", "","", mode.getImgurl(),"" , "", mode.getStartpoint(), mode.getSenderid(), ""));
 
 
                         postAdapter.notifyDataSetChanged();

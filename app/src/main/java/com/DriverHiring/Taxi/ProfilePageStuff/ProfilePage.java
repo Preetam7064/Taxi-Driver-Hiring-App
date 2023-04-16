@@ -86,7 +86,7 @@ public class ProfilePage extends AppCompatActivity implements
         viewPagerTab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Toast.makeText(ProfilePage.this, "Changed to " + position, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(ProfilePage.this, "Changed to " + position, Toast.LENGTH_SHORT).show();
             }
 
             @Override

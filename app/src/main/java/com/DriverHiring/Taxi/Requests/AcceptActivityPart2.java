@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.DriverHiring.Taxi.Adatpters.PostAdapter;
 import com.DriverHiring.Taxi.AllPostsWork.ShowRouteOnMap;
+import com.DriverHiring.Taxi.ModelClasses.NewPostRider;
 import com.DriverHiring.Taxi.ModelClasses.PostDriver;
 import com.DriverHiring.Taxi.ModelClasses.PostRider;
 import com.DriverHiring.Taxi.ModelClasses.RequestsModel;
@@ -52,7 +53,7 @@ public class AcceptActivityPart2 extends AppCompatActivity {
     private MyAddedPosts.OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private DatabaseReference myRef;
-    private ArrayList<PostRider> listrider = new ArrayList<>();
+    private ArrayList<NewPostRider> listrider = new ArrayList<>();
     private String type;
     private String fullname;
 
@@ -106,7 +107,7 @@ public class AcceptActivityPart2 extends AppCompatActivity {
                             postDriverArrayList.add(new PostDriver("", mode.getPostid(), "", mode.getEndpoint(), mode.getSendername(), mode.getId(), "", "", "", "", mode.getReciverid(), "", mode.getImgurl(), "", "", mode.getStartpoint(), mode.getSenderid(), ""));
 
 
-                            listrider.add(new PostRider("", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+                            listrider.add(new NewPostRider("", "", "", "", "", "", "", "", "", "", "", "", "", "","",""));
 
                             postAdapter.notifyDataSetChanged();
                             System.err.println("driver oput is " + mode.getSendername());
@@ -147,7 +148,7 @@ public class AcceptActivityPart2 extends AppCompatActivity {
 
                             System.err.println("mydata" + dataSnapshot.getValue());
 
-                            listrider.add(new PostRider("", "", mode.getEndpoint(), mode.getSendername(), mode.getId(), "", "", "", "", mode.getImgurl(), "", "", mode.getStartpoint(), mode.getSenderid()));
+                            listrider.add(new NewPostRider("", "", mode.getEndpoint(), mode.getSendername(), mode.getId(), "", "", "", "", mode.getImgurl(), "", "", mode.getStartpoint(), mode.getSenderid(),"",""));
 
 
                             postAdapter.notifyDataSetChanged();

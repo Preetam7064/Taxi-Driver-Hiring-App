@@ -88,7 +88,8 @@
                     android:id="@+id/vehicle_layout"
                     android:layout_height="fill_parent"
                     android:layout_weight="1.0"
-                    android:layout_width="0.0px">
+                    android:layout_width="0.0px"
+                    android:visibility="gone">
 
                     <ImageButton
                         android:background="@color/mdtp_white"
@@ -99,7 +100,8 @@
                         android:layout_height="@dimen/book_ride_rideType_medium"
                         android:layout_width="@dimen/book_ride_rideType_medium"
                         android:scaleType="centerInside"
-                        android:src="@drawable/vehicle_enabled" />
+                        android:src="@drawable/vehicle_enabled"
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/vehicle_text"
@@ -114,7 +116,8 @@
                         android:maxLines="1"
                         android:text="Driver"
                         android:textColor="@color/black_text_color"
-                        android:textSize="@dimen/book_ride_text_medium" />
+                        android:textSize="@dimen/book_ride_text_medium"
+                        android:visibility="gone"/>
                 </RelativeLayout>
             </LinearLayout>
 
@@ -496,22 +499,85 @@
                     android:background="@color/mdtp_red"
                     android:orientation="vertical" />
             </LinearLayout>
-
-            <Button
-                android:id="@+id/offerLiftConfirm"
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="0.0px"
-                android:layout_gravity="bottom"
-                android:layout_marginTop="10.0dip"
-                android:layout_weight="1.0"
-                android:background="@drawable/mainactivity_buttondraw"
-                android:gravity="center"
-                android:padding="2.0dip"
-                android:text="Offer Ride"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="@dimen/book_ride_text_medium" />
+                android:layout_weight="1.6"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:weightSum="3.0">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.0px"
+                    android:layout_weight="0.7"
+                    android:gravity="top"
+                    android:text="Number Of Passengers"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/book_ride_text_medium" />
+
+                <EditText
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/no_of_passengersEdtx"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.0px"
+                    android:layout_weight="1.6"
+                    android:gravity="center|left|top"
+                    android:inputType="number"
+                    android:maxLength="150"
+                    android:paddingLeft="5.0dip"
+                    android:paddingTop="0.0dip"
+                    android:textColor="@color/gray_text_color"
+                    android:textSize="15sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="0.0px"
+                android:layout_weight="1.6"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:weightSum="3.0">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.0px"
+                    android:layout_weight="0.7"
+                    android:gravity="top"
+                    android:text="Vehicle Details"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/book_ride_text_medium" />
+
+                <EditText
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/typeOfVehicle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.0px"
+                    android:layout_weight="1.6"
+                    android:gravity="center|left|top"
+                    android:maxLength="150"
+                    android:paddingLeft="5.0dip"
+                    android:paddingTop="0.0dip"
+                    android:textColor="@color/gray_text_color"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
         </LinearLayout>
+        <Button
+            android:id="@+id/offerLiftConfirm"
+            android:layout_width="fill_parent"
+            android:layout_height="0.0px"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="10.0dip"
+            android:layout_weight="1.0"
+            android:background="@drawable/mainactivity_buttondraw"
+            android:gravity="center"
+            android:padding="2.0dip"
+            android:text="Want Driver"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/book_ride_text_medium" />
 
     </LinearLayout>
 </LinearLayout>

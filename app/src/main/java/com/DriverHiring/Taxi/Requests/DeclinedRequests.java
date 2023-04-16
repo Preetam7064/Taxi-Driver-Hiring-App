@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DriverHiring.Taxi.Adatpters.PostAdapter;
+import com.DriverHiring.Taxi.ModelClasses.NewPostRider;
 import com.DriverHiring.Taxi.ModelClasses.PostDriver;
 import com.DriverHiring.Taxi.ModelClasses.PostRider;
 import com.DriverHiring.Taxi.ModelClasses.RequestsModel;
@@ -39,7 +40,7 @@ public class DeclinedRequests extends Fragment {
     private MyAddedPosts.OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private DatabaseReference myRef;
-    private ArrayList<PostRider> listrider = new ArrayList<>();
+    private ArrayList<NewPostRider> listrider = new ArrayList<>();
     private String type;
 
     @Override
@@ -80,7 +81,7 @@ public class DeclinedRequests extends Fragment {
                     postDriverArrayList.add(new PostDriver("", mode.getPostid(), "", mode.getEndpoint(), mode.getSendername(), mode.getId(), "", "", "", "", mode.getReciverid(), "", mode.getImgurl(), "", "", mode.getStartpoint(), mode.getSenderid(), ""));
 
 
-                    listrider.add(new PostRider("", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+                    listrider.add(new NewPostRider("", "", "", "", "", "", "", "", "", "", "", "", "", "","",""));
 
                     postAdapter.notifyDataSetChanged();
 
@@ -133,9 +134,7 @@ public class DeclinedRequests extends Fragment {
                     RequestsModel mode = dataSnapshot.getValue(RequestsModel.class);
                     System.err.println("mydata" + mode.getStartpoint());
 
-                    listrider.add(new PostRider("", "", mode.getEndpoint(), mode.getSendername(), mode.getId(), "", "", "", "", mode.getImgurl(), "", "", mode.getStartpoint(), mode.getSenderid()));
-
-
+                    listrider.add(new NewPostRider("", mode.getEndpoint(), mode.getSendername(), mode.getId(), "", "", "", "", "","", mode.getImgurl(),"" , "", mode.getStartpoint(), mode.getSenderid(), ""));
                     postAdapter.notifyDataSetChanged();
 
                     //}

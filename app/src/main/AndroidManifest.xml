@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.DriverHiring.Taxi">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -29,7 +28,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity
+            android:name=".DriverRideMap"
+            android:exported="false" />
+        <activity
+            android:name=".PostYourTraverRider"
+            android:exported="false" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -41,27 +45,29 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-        <activity android:name="com.DriverHiring.Taxi.TripDetails" />
-        <activity android:name="com.DriverHiring.Taxi.Requests.AcceptActivityPart2" />
-        <activity android:name="com.DriverHiring.Taxi.Requests.AllRequests" />
-        <activity android:name="com.DriverHiring.Taxi.ProfilePageStuff.RecivedRequestsActivity" />
-        <activity android:name="com.DriverHiring.Taxi.ProfilePageStuff.ProfilePage" />
+
+        <activity android:name=".TripDetails" />
+        <activity android:name=".Requests.AcceptActivityPart2" />
+        <activity android:name=".Requests.AllRequests" />
+        <activity android:name=".ProfilePageStuff.RecivedRequestsActivity" />
+        <activity android:name=".ProfilePageStuff.ProfilePage" />
         <activity
-            android:name="com.DriverHiring.Taxi.AllPostsWork.ShowRouteOnMap"
+            android:name=".AllPostsWork.ShowRouteOnMap"
             android:label="@string/title_activity_show_route_on_map" />
-        <activity android:name="com.DriverHiring.Taxi.AllPostsWork.ScreenAfterPostIsSelectedFromList" />
-        <activity android:name="com.DriverHiring.Taxi.AllPostsWork.ListAllPosts" />
-        <activity android:name="com.DriverHiring.Taxi.AllPostsWork.PostTravelStep2ForDriver" />
-        <activity android:name="com.DriverHiring.Taxi.AllPostsWork.Select_location_for_Post" />
-        <activity android:name="com.DriverHiring.Taxi.AllPostsWork.PostYourTravel" />
-        <activity android:name="com.DriverHiring.Taxi.SignupPageContinueAsDriver" />
-        <activity android:name="com.DriverHiring.Taxi.SignupPageContinueAsPassenger" />
-        <activity android:name="com.DriverHiring.Taxi.PhoneVerify.ActivityPhoneVerify" />
+        <activity android:name=".AllPostsWork.ScreenAfterPostIsSelectedFromList" />
+        <activity android:name=".AllPostsWork.ListAllPosts" />
+        <activity android:name=".AllPostsWork.PostTravelStep2ForDriver" />
+        <activity android:name=".AllPostsWork.Select_location_for_Post" />
+        <activity android:name=".AllPostsWork.PostYourTravel" />
+        <activity android:name=".AllPostsWork.PostYourTravelRider" />
+        <activity android:name=".SignupPageContinueAsDriver" />
+        <activity android:name=".SignupPageContinueAsPassenger" />
+        <activity android:name=".PhoneVerify.ActivityPhoneVerify" />
         <activity
-            android:name="com.DriverHiring.Taxi.SignupPage"
-            android:parentActivityName="com.DriverHiring.Taxi.LoginPage" />
-        <activity android:name="com.DriverHiring.Taxi.HomePageMap" />
-        <activity android:name="com.DriverHiring.Taxi.LoginPage">
+            android:name=".SignupPage"
+            android:parentActivityName=".LoginPage" />
+        <activity android:name=".HomePageMap" />
+        <activity android:name=".LoginPage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -70,7 +76,7 @@
         </activity>
 
         <service
-            android:name="com.DriverHiring.Taxi.Notifications.MyFirebaseMessaging"
+            android:name=".Notifications.MyFirebaseMessaging"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -78,8 +84,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name="com.DriverHiring.Taxi.ChatStuff.MainActivity" />
-        <activity android:name="com.DriverHiring.Taxi.ChatStuff.MessageActivity" />
+        <activity android:name=".ChatStuff.MainActivity" />
+        <activity android:name=".ChatStuff.MessageActivity" />
     </application>
 
 </manifest>

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,7 +40,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class PostYourTravel extends AppCompatActivity {
+public class PostYourTravelRider extends AppCompatActivity {
     LatLng latLngPostStart, latLngPostEnd;
     String date_time = "";
     int mYear;
@@ -91,13 +92,12 @@ public class PostYourTravel extends AppCompatActivity {
     private TextView offerreturndateDetail;
     private Button offerLiftConfirm;
     private FirebaseAuth mAuth;
-
+    private EditText noOfPassengers,vehicleType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post__your__travel);
-
+        setContentView(R.layout.activity_post_your_traver_rider);
         // Write a message to the database
         database = FirebaseDatabase.getInstance();
 
@@ -141,6 +141,8 @@ public class PostYourTravel extends AppCompatActivity {
         offerreturndateDetail = (TextView) findViewById(R.id.offerreturndate_detail);
         vehicleText=(TextView) findViewById(R.id.vehicle_text);
         riderText=(TextView) findViewById(R.id.rider_text);
+        noOfPassengers=(EditText) findViewById(R.id.no_of_passengersEdtx);
+        vehicleType=(EditText) findViewById(R.id.typeOfVehicle);
 
 
         //switches
@@ -203,7 +205,6 @@ public class PostYourTravel extends AppCompatActivity {
 
         toggleClickListners();
     }
-
     public void toggleClickListners() {
         sat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -309,7 +310,7 @@ public class PostYourTravel extends AppCompatActivity {
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog datePickerDialo = new DatePickerDialog(PostYourTravel.this,
+                DatePickerDialog datePickerDialo = new DatePickerDialog(PostYourTravelRider.this,
                         new DatePickerDialog.OnDateSetListener() {
 
                             @Override
@@ -324,7 +325,7 @@ public class PostYourTravel extends AppCompatActivity {
                                 Minute = c.get(Calendar.MINUTE);
 
                                 // Launch Time Picker Dialog
-                                TimePickerDialog timePickerDialo = new TimePickerDialog(PostYourTravel.this,
+                                TimePickerDialog timePickerDialo = new TimePickerDialog(PostYourTravelRider.this,
                                         new TimePickerDialog.OnTimeSetListener() {
 
                                             @Override
@@ -347,15 +348,6 @@ public class PostYourTravel extends AppCompatActivity {
         });
         SharedPreferences prefs = (SharedPreferences) getSharedPreferences("saveddata", MODE_PRIVATE);
         String type_user = prefs.getString("type", "");
-
-        if(type_user.equalsIgnoreCase("rider"))
-        {
-            vehicleImage.setVisibility(View.GONE);
-            vehicleText.setVisibility(View.GONE);
-        } else if (type_user.equalsIgnoreCase("driver")) {
-            riderImage.setVisibility(View.GONE);
-            riderText.setVisibility(View.GONE);
-        }
 
 
         riderImage.setOnClickListener(new View.OnClickListener() {
@@ -396,21 +388,29 @@ public class PostYourTravel extends AppCompatActivity {
                 String uidfromperfs = prefs.getString("uid", "nouid");
                 String profileimgurl = prefs.getString("profileimageurl", "noimg");
                 String fullname = prefs.getString("fullname", "noname");
-                String vehtype = prefs.getString("vehicaltype", "novtype");
                 String phoneno = prefs.getString("phoneno", "nophone");
+
 
                 String latstart = String.valueOf(latLngPostStart.latitude);
                 String lngstart = String.valueOf(latLngPostStart.longitude);
 
                 String latend = String.valueOf(latLngPostEnd.latitude);
                 String lngend = String.valueOf(latLngPostEnd.longitude);
+                String passengers=noOfPassengers.getText().toString();
+                String vehicleTypeValue=String.valueOf(vehicleType);
+
+                if(vehicleTypeValue=="")
+                {
+                    vehicleType.requestFocus();
+                    return;
+                }
 
                 Drawable drawable = riderImage.getDrawable();
                 Drawable drawabledriver = vehicleImage.getDrawable();
 
                 if (drawable.getConstantState().equals(getResources().getDrawable(R.drawable.passenger_enabled).getConstantState())) {
 
-                    final ProgressDialog progressDialog = new ProgressDialog(PostYourTravel.this,
+                    final ProgressDialog progressDialog = new ProgressDialog(PostYourTravelRider.this,
                             R.style.AppTheme_Dark_Dialog);
                     progressDialog.setIndeterminate(true);
                     progressDialog.setMessage("Wait...");
@@ -483,11 +483,13 @@ public class PostYourTravel extends AppCompatActivity {
 
                     }
                     map.put("roundtrip", roundtrip);
+                    map.put("noOfPassengers",passengers);
+                    map.put("vehicalType",vehicleType.getText().toString());
 
                     dbref.setValue(map).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(PostYourTravel.this, "Post Added", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PostYourTravelRider.this, "Post Added", Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
 
                             startActivity(new Intent(getApplicationContext(), HomePageMap.class));
@@ -500,82 +502,9 @@ public class PostYourTravel extends AppCompatActivity {
                         }
                     });
 
-                } else if (drawabledriver.getConstantState().equals(getResources().getDrawable(R.drawable.vehicle_enabled).getConstantState())) {
-
-
-                    String regulartripstring = "";
-                    if (regularTripsw.isChecked()) {
-
-
-                        if (sat.isChecked()) {
-
-                            regulartripstring = regulartripstring + "sat,";
-                        }
-                        if (sun.isChecked()) {
-
-                            regulartripstring = regulartripstring + "sun,";
-                        }
-                        if (mon.isChecked()) {
-
-                            regulartripstring = regulartripstring + "mon,";
-                        }
-                        if (tue.isChecked()) {
-
-                            regulartripstring = regulartripstring + "tue,";
-                        }
-                        if (wed.isChecked()) {
-
-                            regulartripstring = regulartripstring + "wed,";
-                        }
-                        if (thu.isChecked()) {
-
-                            regulartripstring = regulartripstring + "thu,";
-                        }
-                        if (fri.isChecked()) {
-
-                            regulartripstring = regulartripstring + "fri,";
-                        }
-
-
-                    }
-
-
-                    String startP = startPointTx.getText().toString();
-                    String endP = endPointTx.getText().toString();
-                    String depeDate = offerdeparturedate.getText().toString();
-
-                    String roundtrip = "";
-                    if (offerRoundTripSw.isChecked()) {
-
-                        roundtrip = offerReturnTimetx.getText().toString();
-
-                    }
-
-                    Intent intent = new Intent(getApplicationContext(), PostTravelStep2ForDriver.class);
-
-                    intent.putExtra("uid", uidfromperfs);
-
-                    intent.putExtra("profileimgurl", profileimgurl);
-                    intent.putExtra("fullname", fullname);
-
-                    intent.putExtra("regulartripstring", regulartripstring);
-
-                    intent.putExtra("startP", startP);
-                    intent.putExtra("endP", endP);
-
-                    intent.putExtra("latstart", latstart);
-                    intent.putExtra("lngstart", lngstart);
-
-                    intent.putExtra("latend", latend);
-                    intent.putExtra("lngend", lngend);
-
-
-                    intent.putExtra("depeDate", depeDate);
-                    intent.putExtra("roundtrip", roundtrip);
-                    intent.putExtra("vehicaltype", vehtype);
-                    startActivity(intent);
-
-
+                } else
+                {
+                    Toast.makeText(PostYourTravelRider.this, "Enable Rider ICON", Toast.LENGTH_SHORT).show();
                 }
 
 

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DriverHiring.Taxi.Adatpters.PostAdapter;
+import com.DriverHiring.Taxi.ModelClasses.NewPostRider;
 import com.DriverHiring.Taxi.ModelClasses.PostDriver;
 import com.DriverHiring.Taxi.ModelClasses.PostRider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,7 +50,7 @@ public class ListAllPostsDriver extends Fragment {
     ArrayList<PostDriver> postDriverArrayList = new ArrayList<>();
     DatabaseReference myRef;
     String currentUserUid = "";
-    private ArrayList<PostRider> listrider = new ArrayList<>();
+    private ArrayList<NewPostRider> listrider = new ArrayList<>();
     private FirebaseAuth mAuth;
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -111,7 +112,7 @@ public class ListAllPostsDriver extends Fragment {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                 //to avoid nuul exception
-                listrider.add(new PostRider("", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+                listrider.add(new NewPostRider("", "", "", "", "", "", "", "", "", "", "", "", "", "","",""));
 
 
                 PostDriver value = dataSnapshot.getValue(PostDriver.class);

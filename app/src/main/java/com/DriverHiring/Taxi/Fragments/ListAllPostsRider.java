@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DriverHiring.Taxi.Adatpters.PostAdapter;
+import com.DriverHiring.Taxi.ModelClasses.NewPostRider;
 import com.DriverHiring.Taxi.ModelClasses.PostDriver;
 import com.DriverHiring.Taxi.ModelClasses.PostRider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,7 +47,7 @@ public class ListAllPostsRider extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     RecyclerView recyclerView;
     PostAdapter postAdapter;
-    ArrayList<PostRider> postRiderArrayList = new ArrayList<>();
+    ArrayList<NewPostRider> postRiderArrayList = new ArrayList<>();
     DatabaseReference myRef;
     String currentUserUid;
     private ArrayList<PostDriver> list = new ArrayList<>();
@@ -112,7 +113,7 @@ public class ListAllPostsRider extends Fragment {
                 list.add(new PostDriver("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
 
 
-                PostRider value = dataSnapshot.getValue(PostRider.class);
+                NewPostRider value = dataSnapshot.getValue(NewPostRider.class);
 
                 if (!currentUserUid.equals(value.getUid())) {
                     postRiderArrayList.add(value);

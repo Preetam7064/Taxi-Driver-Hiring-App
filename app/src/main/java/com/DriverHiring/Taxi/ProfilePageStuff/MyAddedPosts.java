@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DriverHiring.Taxi.Adatpters.PostAdapter;
+import com.DriverHiring.Taxi.ModelClasses.NewPostRider;
 import com.DriverHiring.Taxi.ModelClasses.PostDriver;
 import com.DriverHiring.Taxi.ModelClasses.PostRider;
 import com.google.firebase.database.ChildEventListener;
@@ -38,7 +40,7 @@ public class MyAddedPosts extends Fragment {
     private OnFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
     private DatabaseReference myRef;
-    private ArrayList<PostRider> listrider = new ArrayList<>();
+    private ArrayList<NewPostRider> listrider = new ArrayList<>();
     private String type;
 
     @Override
@@ -51,7 +53,7 @@ public class MyAddedPosts extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_my_added_posts, container, false);
+        final View view = inflater.inflate(R.layout.fragment_my_added_posts, container, false);
 
 
         SharedPreferences prefs = getActivity().getSharedPreferences("saveddata", MODE_PRIVATE);
@@ -73,7 +75,7 @@ public class MyAddedPosts extends Fragment {
                 public void onChildAdded(@NonNull DataSnapshot dataSnap, @Nullable String s) {
 
                     //to avoid nuul exception
-                    listrider.add(new PostRider("", "", "", "", "", "", "", "", "", "", "", "", "", ""));
+                    listrider.add(new NewPostRider("", "", "", "", "", "", "", "", "", "", "", "", "", "","",""));
 
 
                     PostDriver value = dataSnap.getValue(PostDriver.class);
@@ -115,7 +117,7 @@ public class MyAddedPosts extends Fragment {
 
             myRef = FirebaseDatabase.getInstance().getReference("PostsAsPassenger");
 
-            postAdapter = new PostAdapter(true, getActivity(), postDriverArrayList, listrider, "true");
+            postAdapter = new PostAdapter(false, getActivity(), postDriverArrayList, listrider, "true");
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             recyclerView.setAdapter(postAdapter);
 
@@ -126,9 +128,10 @@ public class MyAddedPosts extends Fragment {
                     postDriverArrayList.add(new PostDriver("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""));
 
 
-                    PostRider value = dataSnapshot.getValue(PostRider.class);
+                    NewPostRider value = dataSnapshot.getValue(NewPostRider.class);
 
                     if (currentUserUid.equals(value.getUid())) {
+                        //Toast.makeText(view.getContext(), ""+value.getProfileimgurl(), Toast.LENGTH_SHORT).show();
                         listrider.add(value);
                         postAdapter.notifyDataSetChanged();
                         System.err.println("rider is " + value.getFullname());

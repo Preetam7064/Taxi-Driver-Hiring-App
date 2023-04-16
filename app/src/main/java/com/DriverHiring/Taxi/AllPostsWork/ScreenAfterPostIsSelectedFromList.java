@@ -139,7 +139,7 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
     }
 
     void setUpDataForDriver() {
-        offerTypeMessage.setText("is offering a ride");
+        offerTypeMessage.setText("want a ride");
 
         offerDetailsName.setText(fullname);
 
@@ -192,7 +192,7 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
         if (split3.length < 2) {
 
             returnTimeDetailsDate.setText(split3[0]);
-            returnTimeDetailsTime.setText(split3[1]);
+            //returnTimeDetailsTime.setText(split3[1]);
 
         }
         offerDetailsStartAddress.setText(startpoint);
@@ -267,7 +267,7 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
         String[] split3 = roundtrip.split(",");
 
         returnTimeDetailsDate.setText(split3[0]);
-        returnTimeDetailsTime.setText(split3[1]);
+        //returnTimeDetailsTime.setText(split3[1]);
 
 
         offerDetailsStartAddress.setText(startpoint);
@@ -410,13 +410,15 @@ public class ScreenAfterPostIsSelectedFromList extends AppCompatActivity impleme
                 break;
             case R.id.check_route_bt:
 
-
+                //TODO
+                // TITLE
                 Intent intent = new Intent(getApplicationContext(), ShowRouteOnMap.class);
 
                 intent.putExtra("latstart", latstart);
                 intent.putExtra("latend", latend);
                 intent.putExtra("lngstart", lngstart);
                 intent.putExtra("lngend", lngend);
+                //intent.putExtra("title","done");
                 startActivity(intent);
 
                 break;

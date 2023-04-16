@@ -2,6 +2,7 @@ package com.DriverHiring.Taxi.Adatpters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.DriverHiring.Taxi.AllPostsWork.ScreenAfterPostIsSelectedFromList;
+import com.DriverHiring.Taxi.ModelClasses.NewPostRider;
 import com.DriverHiring.Taxi.ModelClasses.PostDriver;
 import com.DriverHiring.Taxi.ModelClasses.PostRider;
 import com.DriverHiring.Taxi.ModelClasses.RequestsModel;
@@ -46,17 +48,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
     ArrayList<String> dataremoveTemp = new ArrayList<>();
 
     private ArrayList<PostDriver> list = new ArrayList<>();
-    private ArrayList<PostRider> listrider = new ArrayList<>();
+    private ArrayList<NewPostRider> listrider = new ArrayList<>();
 
 
-    public PostAdapter(Context context, ArrayList<PostDriver> list, ArrayList<PostRider> listrider, boolean isDriverP) {
+    public PostAdapter(Context context, ArrayList<PostDriver> list, ArrayList<NewPostRider> listrider, boolean isDriverP) {
         this.list = list;
         this.listrider = listrider;
         this.isDriverP = isDriverP;
         this.context = context;
     }
 
-    public PostAdapter(boolean isDriverP, Context context, ArrayList<PostDriver> list, ArrayList<PostRider> listrider, String isProfile) {
+    public PostAdapter(boolean isDriverP, Context context, ArrayList<PostDriver> list, ArrayList<NewPostRider> listrider, String isProfile) {
         this.isDriverP = isDriverP;
         this.context = context;
         this.list = list;
@@ -75,7 +77,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
 
         final int pos = position;
-        System.err.println("working " + position);
+        //System.err.println("working " + position);
+        //System.out.println(listrider.get(0).getFullname());
 
         if (isProfile.equals("false")) {
 
@@ -127,7 +130,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
             } else {
 
-                final PostRider obj = listrider.get(position);
+                final NewPostRider obj = listrider.get(position);
 
                 System.err.println("nameR is is " + obj.getFullname());
                 System.err.println("nameR 2  is  " + listrider.get(pos).getFullname());
@@ -224,12 +227,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
             } else {
 
-                final PostRider obj = listrider.get(position);
+                final NewPostRider obj = listrider.get(position);
 
                 System.err.println("nameR is is " + obj.getFullname());
                 System.err.println("nameR 2  is  " + listrider.get(pos).getFullname());
 
                 System.err.println("rider is here");
+                //Toast.makeText(context, ""+obj.getId(), Toast.LENGTH_SHORT).show();
 
                 holder.mainLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -439,72 +443,157 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
             } else {
 
-                final PostRider obj = listrider.get(position);
+                final NewPostRider obj = listrider.get(position);
 
                 System.err.println("nameR is is " + obj.getFullname());
                 System.err.println("nameR 2  is  " + listrider.get(pos).getFullname());
+//                System.err.println("Vehicle Details"+obj.getVehicleDetails());
+//                System.err.println("Vehicle Details"+obj.getVehicleDetails());
+//                System.err.println("Vehicle Details"+obj.getVehicleDetails());
+//                System.err.println("Vehicle Details"+obj.getVehicleDetails());
+//                System.err.println("Vehicle Details"+obj.getVehicleDetails());
+//                System.err.println("Vehicle Details"+obj.getVehicleDetails());
+//                System.err.println("Vehicle Details"+obj.getVehicleDetails());
+//                System.err.println("Vehicle Details"+obj.getVehicleDetails());
 
                 System.err.println("rider is here");
+                //Toast.makeText(context, "rider is clicked in Post your Travel Rider", Toast.LENGTH_SHORT).show();
 
                 holder.mainLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        DatabaseReference r = FirebaseDatabase.getInstance().getReference("PostsAsDriver").child(obj.getPhoneno());
-
-
-                        r.addChildEventListener(new ChildEventListener() {
+                        //Toast.makeText(context, "relative layout is clicked", Toast.LENGTH_SHORT).show();
+                        //Creating the instance of PopupMenu
+                        PopupMenu popup = new PopupMenu(context, holder.mainLayout);
+                        //Inflating the Popup using xml file
+                        popup.getMenuInflater().inflate(R.menu.menu_select_request_option, popup.getMenu());
+                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                             @Override
-                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            public boolean onMenuItemClick(MenuItem menuItem) {
+                                switch(menuItem.getTitle().toString()){
+                                    case "Accept Request":
+                                        //final NewPostRider obj = listrider.get(position);
+                                        Log.d("ListRider Object",obj.toString());
+                                        //Toast.makeText(context, ""+obj, Toast.LENGTH_SHORT).show();
+                                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Accepted Requests").child(obj.getUid()).push();
 
-                                PostDriver postDriver = dataSnapshot.getValue(PostDriver.class);
+                                        RequestsModel requestsModel = new RequestsModel();
+                                        requestsModel.setEndpoint(obj.getEndpoint());
+                                        requestsModel.setStartpoint(obj.getStartpoint());
+                                        requestsModel.setImgurl(obj.getProfileimgurl());
+                                        requestsModel.setReciverid(obj.getPhoneno());
+                                        requestsModel.setPostid(obj.getVehicleDetails());
+                                        requestsModel.setSendername(obj.getFullname());
+                                        requestsModel.setSenderid(obj.getUid());
 
-                                Intent intent = new Intent(context, ScreenAfterPostIsSelectedFromList.class);
-                                intent.putExtra("departuredatetime", postDriver.getDeparturedatetime());
-                                intent.putExtra("endpoint", postDriver.getEndpoint());
-                                intent.putExtra("id", postDriver.getId());
-                                intent.putExtra("latend", postDriver.getLatend());
-                                intent.putExtra("latstart", postDriver.getLatstart());
-                                intent.putExtra("lngend", postDriver.getLngend());
-                                intent.putExtra("lngstart", postDriver.getLngstart());
-                                intent.putExtra("noofpassenger", postDriver.getNoofpassenger());
-                                intent.putExtra("offermessage", postDriver.getOffermessage());
-                                intent.putExtra("profileimgurl", postDriver.getProfileimgurl());
-                                intent.putExtra("regulartrip", postDriver.getRegulartrip());
-                                intent.putExtra("roundtrip", postDriver.getRoundtrip());
-                                intent.putExtra("startpoint", postDriver.getStartpoint());
-                                intent.putExtra("uid", postDriver.getUid());
-                                intent.putExtra("vehicaltype", postDriver.getVehicaltype());
-                                intent.putExtra("phoneno", postDriver.getPhoneno());
-                                intent.putExtra("typeOfIntent", "driver");
-                                intent.putExtra("fareamount", postDriver.getFareamount());
-                                intent.putExtra("fullname", postDriver.getFullname());
-                                context.startActivity(intent);
+                                        requestsModel.setId(ref.getKey());
+
+                                        requestsModel.setStatus("accepted");
+                                        ref.setValue(requestsModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+
+                                                    DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("Requests").child(obj.getNoOfPassengers()).child(obj.getPhoneno()).child(obj.getId());
+
+                                                    ref2.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                                            if (task.isSuccessful()) {
+
+                                                                Toast.makeText(context, "Request Accepted, list will be updated on next launch", Toast.LENGTH_SHORT).show();
+
+                                                            }
+
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+
+                                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                                        DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("Passenger Accepted Requests").child(user.getUid()).child(obj.getPhoneno()).push();
 
 
-                            }
+                                        ref2.setValue(requestsModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+//dofrom here
+                                                    DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("Requests").child(obj.getNoOfPassengers()).child(obj.getPhoneno()).child(obj.getId());
 
-                            @Override
-                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                                    ref2.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
 
-                            }
+                                                            if (task.isSuccessful()) {
 
-                            @Override
-                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                                                                Toast.makeText(context, "Request Accepted, list will be updated on next launch", Toast.LENGTH_SHORT).show();
 
-                            }
+                                                            }
 
-                            @Override
-                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                                        }
+                                                    });
 
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                }
+                                            }
+                                        });
 
+                                        break;
+                                    case "Reject Request":
+                                        DatabaseReference ref3 = FirebaseDatabase.getInstance().getReference("Passenger Declined Requests").child(obj.getUid()).push();
+
+                                        RequestsModel requestModel = new RequestsModel();
+                                        requestModel.setEndpoint(obj.getEndpoint());
+                                        requestModel.setStartpoint(obj.getStartpoint());
+                                        requestModel.setImgurl(obj.getProfileimgurl());
+                                        requestModel.setReciverid(obj.getPhoneno());
+                                        requestModel.setPostid(obj.getVehicleDetails());
+                                        requestModel.setSendername(obj.getFullname());
+                                        requestModel.setSenderid(obj.getUid());
+                                        requestModel.setReciverid(obj.getNoOfPassengers());
+
+                                        requestModel.setId(ref3.getKey());
+                                        requestModel.setStatus("Rejected");
+
+                                        System.err.println("myid is" + obj.getNoOfPassengers());
+                                        System.err.println("myid is" + obj.getPhoneno());
+                                        System.err.println("myid is" + obj.getId());
+
+
+                                        ref3.setValue(requestModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    DatabaseReference ref2 = FirebaseDatabase.getInstance().getReference("Requests").child(obj.getNoOfPassengers()).child(obj.getPhoneno()).child(obj.getId());
+
+                                                    ref2.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                                            if (task.isSuccessful()) {
+
+                                                                Toast.makeText(context, "Request removed, list will be updated on next launch", Toast.LENGTH_SHORT).show();
+
+                                                            }
+
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+                                        break;
+                                    default:
+                                        Toast.makeText(context, "Default", Toast.LENGTH_SHORT).show();
+                                }
+
+                                return true;
                             }
                         });
-
+                        popup.show();
 
                     }
                 });
@@ -515,13 +604,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
                 holder.endpointtxt.setText(obj.getEndpoint());
                 holder.endpointtxt.setSelected(true);
+                //Toast.makeText(context, ""+obj.getProfileimgurl(), Toast.LENGTH_SHORT).show();
 
 
-                Picasso.get()
-                        .load(obj.getProfileimgurl())
-                        .placeholder(R.drawable.placeholder_user)
-                        .error(R.drawable.ic_close)
-                        .into(holder.user_profile_img_rec_post);
+//                Picasso.get()
+//                        .load(obj.getProfileimgurl())
+//                        .placeholder(R.drawable.placeholder_user)
+//                        .error(R.drawable.ic_close)
+//                        .into(holder.user_profile_img_rec_post);
             }
         } else if (isProfile.equals("Daccept")) {
 
@@ -597,7 +687,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder> 
 
             } else {
 
-                final PostRider obj = listrider.get(position);
+                final NewPostRider obj = listrider.get(position);
 
 
                 holder.mainLayout.setOnLongClickListener(new View.OnLongClickListener() {

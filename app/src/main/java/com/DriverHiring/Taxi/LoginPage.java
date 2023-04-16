@@ -190,32 +190,32 @@ public class LoginPage extends AppCompatActivity {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.CALL_PHONE
                 ).withListener(new MultiplePermissionsListener() {
-            @Override
-            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
 
-                if (report.isAnyPermissionPermanentlyDenied()) {
-                    final android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(LoginPage.this);
-                    dialog.setTitle("Location Permission")
-                            .setMessage("You have to give location permission!!, the app will close now")
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            final android.app.AlertDialog.Builder dialog = new android.app.AlertDialog.Builder(LoginPage.this);
+                            dialog.setTitle("Location Permission")
+                                    .setMessage("You have to give location permission!!, the app will close now")
 
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                                    finishAffinity();
-                                }
-                            });
-                    dialog.setCancelable(false);
-                    dialog.show();
-                } else {
-                    isPermission = true;
-                }
-            }
+                                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                                            finishAffinity();
+                                        }
+                                    });
+                            dialog.setCancelable(false);
+                            dialog.show();
+                        } else {
+                            isPermission = true;
+                        }
+                    }
 
-            @Override
-            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                token.continuePermissionRequest();
-            }
-        }).check();
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                }).check();
 
         return isPermission;
     }
@@ -286,7 +286,6 @@ public class LoginPage extends AppCompatActivity {
 
                                             editor.putString("vehicalname", datas.child("vehicalname").getValue().toString());
                                             editor.putString("vehicalnoplate", datas.child("vehicalnoplate").getValue().toString());
-
                                         } else {
                                             editor.putString("type", "rider");
 
@@ -363,7 +362,7 @@ public class LoginPage extends AppCompatActivity {
         AlertDialog.Builder diaBuilder = new AlertDialog.Builder(this);
         diaBuilder.setTitle("Account Blocked");
         diaBuilder.setCancelable(false);
-        diaBuilder.setMessage("Your Account Has been blocked! for further information contact the admin at admin@admin.com");
+        diaBuilder.setMessage("Your Account Has been blocked! for further information contact the admin at preetam@gmail.com.com");
         diaBuilder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
