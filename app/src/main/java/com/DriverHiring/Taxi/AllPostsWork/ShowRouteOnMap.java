@@ -62,6 +62,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 import com.DriverHiring.Taxi.R;
 
 public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallback {
@@ -78,15 +79,13 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
     FusedLocationProviderClient fusedLocationProviderClient;
     LocationCallback locationCallback;
     IGoogleAPI mService;
+    Button endrideforpostbtn;
     private GoogleMap mMap;
     private List<Polyline> polylines;
     private LocationRequest locationRequest;
     private Location mLastLocation;
     private Marker driverMarker;
-    private String currentUserUid, type, fullname;
-
-
-    Button endrideforpostbtn;
+    private String currentUserUid, type, fullname, customerLat, customerLng;
     private String keyToStopRide;
 
     public static IGoogleAPI getGoogleAPI() {
@@ -129,15 +128,13 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
 
                             if (task.isSuccessful()) {
 
-                              String latStart = startL+","+startLN;
-                                String latEnd = endL+","+endLN;
-
-
+                                String latStart = startL + "," + endL;
+                                String latEnd = startLN + "," + endLN;
 
 
                                 Intent intent = new Intent(ShowRouteOnMap.this, TripDetails.class);
-                                intent.putExtra("startAdd",latStart);
-                                intent.putExtra("endAdd",latEnd);
+                                intent.putExtra("startAdd", latStart);
+                                intent.putExtra("endAdd", latEnd);
                                 startActivity(intent);
                                 Toast.makeText(getApplicationContext(), "Ride completed", Toast.LENGTH_SHORT).show();
 
@@ -152,6 +149,9 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
 
                 }
             });
+        }
+        else {
+            Toast.makeText(ShowRouteOnMap.this, "You are Rider", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -243,6 +243,11 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
 
                                     map.put("sourcelat", String.valueOf(latitude));
                                     map.put("sourcelng", String.valueOf(longitude));
+                                    map.put("customerLat",String.valueOf(customerLat));
+                                    map.put("customerLng",String.valueOf(customerLng));
+                                    map.put("destinationLat",String.valueOf(startLN));
+                                    map.put("destinationLng",String.valueOf(endLN));
+
 
 
                                     ref.updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -280,7 +285,7 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
         locationRequest.setInterval(1000);
         locationRequest.setFastestInterval(500);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setSmallestDisplacement(10);
+        locationRequest.setSmallestDisplacement(5);
 
 
     }
@@ -292,8 +297,10 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
         startLN = getIntent().getStringExtra("latend");
         endL = getIntent().getStringExtra("lngstart");
         endLN = getIntent().getStringExtra("lngend");
-
         title = getIntent().getStringExtra("title");
+        customerLat = getIntent().getStringExtra("customerLat");
+        customerLng = getIntent().getStringExtra("customerLng");
+
 
     }
 
@@ -327,6 +334,8 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
         start = new LatLng(Double.parseDouble(startL), Double.parseDouble(endL));
 
         end = new LatLng(Double.parseDouble(startLN), Double.parseDouble(endLN));
+        waypoint=new LatLng(Double.parseDouble(customerLat), Double.parseDouble(customerLng));
+        Log.d("waypoint=",waypoint.toString());
 
 
 //        start = new LatLng(33.997797, 71.490276);
@@ -338,7 +347,7 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
 
         // End marker
 
-
+        mMap.addMarker(new MarkerOptions().position(waypoint).title("Passenger"));
         mMap.addMarker(new MarkerOptions().position(end).title("End Point"));
 
 
@@ -393,6 +402,8 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
                             // Start marker
                             mMap.addMarker(new MarkerOptions().position(start).title("Start Point"));
 
+                            mMap.addMarker(new MarkerOptions().position(waypoint).title("Passenger"));
+
                             // End marker
 
                             mMap.addMarker(new MarkerOptions().position(end).title("End Point"));
@@ -410,7 +421,7 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
 
                         }
                     })
-                    .waypoints(start, end)
+                    .waypoints(start,waypoint,end)
                     .key(getResources().getString(R.string.google_maps_key))
 //                .alternativeRoutes(true)
                     .build();
@@ -444,10 +455,11 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
                     "" +
                     "origin=" + currentPosition.latitude + "," + currentPosition.longitude + "&" +
                     "destination=" + startLN + "," + endLN + "&" +
+                    "waypoints=" + customerLat + "," + customerLng + "&" +
                     "key=" + getResources().getString(R.string.google_maps_key);
 
 
-            Log.d("Usama", requestApi);//print url for debug
+            Log.d("apilink", requestApi);//print url for debug
             mService.getPath(requestApi)
                     .enqueue(new Callback<String>() {
                         @Override
@@ -476,17 +488,16 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
     }
 
 
-
     private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
-        ProgressDialog mDialog = new ProgressDialog(ShowRouteOnMap.this);
+        //ProgressDialog mDialog = new ProgressDialog(ShowRouteOnMap.this);
 
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mDialog.setMessage("Please Wait.....");
-            mDialog.show();
+            //mDialog.setMessage("Please Wait.....");
+            //mDialog.show();
         }
 
         @Override
@@ -512,7 +523,7 @@ public class ShowRouteOnMap extends FragmentActivity implements OnMapReadyCallba
 
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> lists) {
-            mDialog.dismiss();
+            //mDialog.dismiss();
 
             ArrayList points;
             PolylineOptions polylineOptions = null;

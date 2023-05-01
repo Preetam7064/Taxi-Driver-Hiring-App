@@ -40,6 +40,7 @@ import com.DriverHiring.Taxi.AllPostsWork.ListAllPosts;
 import com.DriverHiring.Taxi.AllPostsWork.PostYourTravel;
 import com.DriverHiring.Taxi.AllPostsWork.PostYourTravelRider;
 import com.DriverHiring.Taxi.ChatStuff.MainActivity;
+import com.DriverHiring.Taxi.ModelClasses.NewRideRequestModel;
 import com.DriverHiring.Taxi.ModelClasses.StartRideRequestModel;
 import com.DriverHiring.Taxi.ModelClasses.User;
 import com.DriverHiring.Taxi.ProfilePageStuff.ProfilePage;
@@ -111,8 +112,8 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
     private LocationManager mLocationManager;
     private LocationRequest mLocationRequest;
     private LocationListener listener;
-    private long UPDATE_INTERVAL = 2 * 1000;  /* 10 secs */
-    private long FASTEST_INTERVAL = 20000; /* 20 sec */
+    private long UPDATE_INTERVAL = 15000;  /* 15 secs */
+    private long FASTEST_INTERVAL = 10000; /* 10 sec */
     private LocationManager locationManager;
     private LatLng latLng;
     private boolean isPermission;
@@ -377,7 +378,7 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
         String msg = "Updated Location: " +
                 Double.toString(location.getLatitude()) + "," +
                 Double.toString(location.getLongitude());
-        //Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Location Changed", Toast.LENGTH_SHORT).show();
         // You can now create a LatLng Object for use with maps
         latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -674,15 +675,16 @@ public class HomePageMap extends AppCompatActivity implements OnMapReadyCallback
 
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
-                    final StartRideRequestModel requestModel = ds.getValue(StartRideRequestModel.class);
+                    final NewRideRequestModel requestModel = ds.getValue(NewRideRequestModel.class);
 
                     // rideRequestModelArrayList.add(requestModel);
 
                     System.err.println("mylat" + requestModel.getSourcelat());
 
                     start = new LatLng(Double.parseDouble(requestModel.getSourcelat()), Double.parseDouble(requestModel.getSourcelng()));
+                    //Toast.makeText(HomePageMap.this, ""+ds.getValue("destinationLat"), Toast.LENGTH_SHORT).show();
 
-                    end = new LatLng(Double.parseDouble(requestModel.getDestenationlat()), Double.parseDouble(requestModel.getDestenationlng()));
+                    end = new LatLng(Double.parseDouble(requestModel.getDestinationLat()), Double.parseDouble(requestModel.getDestinationLng()));
 
                     if (showRides) {
                         Routing routing = new Routing.Builder()

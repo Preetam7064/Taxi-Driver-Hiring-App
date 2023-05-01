@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -31,6 +32,9 @@ import retrofit2.Response;
 
 public class TripDetails extends FragmentActivity implements OnMapReadyCallback {
 
+    public double base_fare = 50;
+    public double time_rate = 0.35;
+    public double distance_rate = 10;
     private GoogleMap mMap;
     private TextView txtData;
     private TextView txtFee;
@@ -41,9 +45,6 @@ public class TripDetails extends FragmentActivity implements OnMapReadyCallback 
     private TextView txtFrom;
     private TextView txtTo;
     private Button btnDoneRide;
-    public  double base_fare = 2.55;
-    public  double time_rate = 0.35;
-    public  double distance_rate = 1.75;
     private IGoogleAPI mService;
 
     @Override
@@ -51,8 +52,7 @@ public class TripDetails extends FragmentActivity implements OnMapReadyCallback 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip_details);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
 
@@ -78,11 +78,8 @@ public class TripDetails extends FragmentActivity implements OnMapReadyCallback 
             }
         });
 
-        if (getIntent().getStringExtra("startAdd") != null)
-        {
-//            System.out.println("error is "+getIntent().getStringExtra("startAdd"));
-
-            getPrice(getIntent().getStringExtra("startAdd"),getIntent().getStringExtra("endAdd"));
+        if (getIntent().getStringExtra("startAdd") != null) {
+            getPrice(getIntent().getStringExtra("startAdd"), getIntent().getStringExtra("endAdd"));
         }
 
     }
@@ -95,7 +92,7 @@ public class TripDetails extends FragmentActivity implements OnMapReadyCallback 
 
     }
 
-    private void settingInformation(String total,String time, String distance,String startAdd,String endAddress) {
+    private void settingInformation(String total, String time, String distance, String startAdd, String endAddress) {
 
         if (getIntent() != null) {
 
@@ -105,11 +102,11 @@ public class TripDetails extends FragmentActivity implements OnMapReadyCallback 
 
             txtData.setText(data);
 
-            txtFee.setText(String.format("$ %.2f", total));
+            txtFee.setText(String.format("Rs %.2f", total));
 
-            txtEstimatedPyout.setText(String.format("$ %.2f", total));
+            txtEstimatedPyout.setText(String.format("Rs %.2f", total));
 
-            txtBaseFare.setText(String.format("$ %.2f", base_fare));
+            txtBaseFare.setText(String.format("Rs %.2f", base_fare));
 
             txtTime.setText(String.format("%s min", time));
             txtDistance.setText(String.format("%s km", distance));
@@ -122,10 +119,7 @@ public class TripDetails extends FragmentActivity implements OnMapReadyCallback 
 
             LatLng dropoff = new LatLng(Double.parseDouble(location_end[0]), Double.parseDouble(location_end[1]));
 
-            mMap.addMarker(new MarkerOptions()
-                    .position(dropoff)
-                    .title("Drop off here")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            mMap.addMarker(new MarkerOptions().position(dropoff).title("Drop off here").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(dropoff, 12.0f));
@@ -142,12 +136,8 @@ public class TripDetails extends FragmentActivity implements OnMapReadyCallback 
         try {
 
 
-            requestUrl = "https://maps.googleapis.com/maps/api/directions/json?" +
-                    "mode=driving&" +
-                    "transit_routing_preference=less_driving&" +
-                    "origin=" + mLocation + "&"
-                    + "destination=" + mDestination + "&"
-                    + "key=" + getResources().getString(R.string.google_maps_key);
+            requestUrl = "https://maps.googleapis.com/maps/api/directions/json?" + "mode=driving&" + "transit_routing_preference=less_driving&" + "origin=" + mLocation + "&" + "destination=" + mDestination + "&" + "key=" + getResources().getString(R.string.google_maps_key);
+            Log.d("tripDetailsUrl", requestUrl);
 
             mService.getPath(requestUrl).enqueue(new Callback<String>() {
                 @Override
@@ -155,6 +145,8 @@ public class TripDetails extends FragmentActivity implements OnMapReadyCallback 
 
                     try {
                         Log.i("error is", response.toString());
+                        //Toast.makeText(TripDetails.this, "Successfully Response is generated"+response.body().toString(), Toast.LENGTH_SHORT).show();
+
 
                         JSONObject jsonObject = new JSONObject(response.body().toString());
                         JSONArray routes = jsonObject.getJSONArray("routes");
@@ -178,13 +170,13 @@ public class TripDetails extends FragmentActivity implements OnMapReadyCallback 
                         Integer time_value = Integer.parseInt(time_text.replaceAll("\\D+", ""));
 
 
+                        System.err.println("data is gone" + formulaPrice(distance_value, time_value));
 
-                        System.err.println("data is gone" +formulaPrice(distance_value, time_value));
-
-                        settingInformation(String.valueOf(formulaPrice(distance_value, time_value)),String.valueOf(time_value),String.valueOf(distance_value),legsobject.getString("start_address"),legsobject.getString("end_address"));
+                        settingInformation(String.valueOf(formulaPrice(distance_value, time_value)), String.valueOf(time_value), String.valueOf(distance_value), legsobject.getString("start_address"), legsobject.getString("end_address"));
 
 
                     } catch (Exception e) {
+                        //Toast.makeText(TripDetails.this, ""+e.getMessage().toString(), Toast.LENGTH_SHORT).show();
 
                         e.printStackTrace();
 
@@ -204,8 +196,9 @@ public class TripDetails extends FragmentActivity implements OnMapReadyCallback 
             Log.e("on erroe 2", "erroe 2 ");
         }
     }
-    public  double formulaPrice(double km, int min) {
-        return (base_fare + (time_rate * min) + distance_rate * km);
+
+    public double formulaPrice(double km, int min) {
+        return (base_fare + distance_rate * km);
     }
 
     private String convertToDayOfWeek(int day) {
@@ -227,8 +220,6 @@ public class TripDetails extends FragmentActivity implements OnMapReadyCallback 
                 return "FRIDAY";
             case Calendar.SATURDAY:
                 return "SATURDAY";
-
-
             default:
                 return "UNK";
 

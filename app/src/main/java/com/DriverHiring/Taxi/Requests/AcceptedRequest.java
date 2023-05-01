@@ -102,7 +102,7 @@ public class AcceptedRequest extends Fragment {
                         public void onItemClick(AdapterView<?> parent, View view, int position,
                                                 long id) {
                             Intent intent = new Intent(getActivity(), DriverRideMap.class);
-                            Toast.makeText(view.getContext(), ""+myStringData.get(position), Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(view.getContext(), ""+myStringData.get(position), Toast.LENGTH_SHORT).show();
 
                             intent.putExtra("myid", myStringData.get(position));
                             startActivity(intent);

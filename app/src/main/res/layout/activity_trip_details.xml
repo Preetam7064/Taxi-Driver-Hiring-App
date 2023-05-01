@@ -84,7 +84,7 @@
                 android:id="@+id/txtBaseFare"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="$2.55"
+                android:text="Rs50"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -130,7 +130,7 @@
                 android:id="@+id/txtDistance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10 km"
+                android:text="2 km"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -156,7 +156,7 @@
                 android:id="@+id/txtEstimatedPyout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rs 10.55"
+                android:text="Rs 70"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />

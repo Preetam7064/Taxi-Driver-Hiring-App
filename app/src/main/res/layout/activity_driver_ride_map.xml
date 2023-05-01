@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DriverRideMap">
+
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -14,16 +15,25 @@
         android:layout_height="match_parent"
         tools:context=".AllPostsWork.ShowRouteOnMap" />
 
-
+    <Button
+        android:id="@+id/startrideforpost"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_above="@+id/endrideforpost"
+        android:layout_marginBottom="10dp"
+        android:background="@color/bg_color_grey"
+        android:text="Start Ride For This Post"
+        android:textColor="@color/white"
+        android:visibility="visible" />
 
     <Button
+        android:id="@+id/endrideforpost"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
+        android:background="@color/bg_color_grey"
         android:text="End Ride For This Post"
         android:textColor="@color/white"
-        android:id="@+id/endrideforpost"
-        android:visibility="gone"
-        android:background="@color/bg_color_grey"/>
+        android:visibility="visible" />
 
 </RelativeLayout>
